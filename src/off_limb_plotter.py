@@ -30,6 +30,7 @@ def image_generator(path):
     *** generates limb enhanced images ***
     path: path of the input file
     '''
+    off_limb_len= 100 #pixels beyond off limb
     file=os.path.expanduser(path)
     amp=10 #off disk amplification factor
     hdu=fits.open(file)[0]
@@ -39,7 +40,7 @@ def image_generator(path):
     mask= np.ones((h,w))*create_circular_mask(h, w, col, row, radius)
     mask=np.where(mask<1, amp, mask) #contains amplification factor (amp) for off disk feature
     offdisk= data*mask
-    outermask= np.ones((h,w))*create_circular_mask(h, w, col, row, radius+50) #controls the size of outer mask
+    outermask= np.ones((h,w))*create_circular_mask(h, w, col, row, radius+off_limb_len) #controls the size of outer mask
     print(path[-64:]+' Done')
     return(offdisk*outermask) #returns limb enhanced images
 
